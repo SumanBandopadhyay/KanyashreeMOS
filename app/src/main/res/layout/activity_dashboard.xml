@@ -12,10 +12,4 @@
     tools:context="com.kanyashreemos.dashboard"
     android:orientation="vertical">
 
-    <Spinner
-        android:id="@+id/spinner_list"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content">
-    </Spinner>
-
 </LinearLayout>

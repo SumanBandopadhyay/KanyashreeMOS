@@ -7,7 +7,8 @@
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        android:name="android.support.multidex.MultiDexApplication">
         <activity
             android:name=".MainActivity"
             android:label="@string/app_name"
@@ -29,7 +30,6 @@
         <activity android:name=".AwardsRecognitions">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
         <activity android:name=".Events">
@@ -40,10 +40,12 @@
         <activity android:name=".dashboard">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
-
+                <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
     </application>
+
+    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE"/>
 
 </manifest>
