@@ -4,8 +4,6 @@ import android.app.ProgressDialog;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -14,6 +12,7 @@ import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -34,8 +33,8 @@ public class dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     private final String userId = "19";
     private String urlAddress = null;
 
-    private String jsonStr = null;
     private String flag = null;
+    private String jsonStr = null;
 
     private SendPostReqAsyncTask sendPostReqAsyncTask;
 
@@ -46,11 +45,15 @@ public class dashboard extends AppCompatActivity implements AdapterView.OnItemSe
     private TextView totalUploadedK2;
     private TextView totalSanctionedK1;
     private TextView totalSanctionedK2;
+    private TextView uniqueEnrolled;
+    private TextView uniqueSanctioned;
 
-    private String uploadedK1 = "";
-    private String uploadedK2 = "";
-    private String sanctionedK1 = "";
-    private String sanctionedK2 = "";
+    private String totalUploadedK1Str = "";
+    private String totalUploadedK2Str = "";
+    private String totalSanctionedK1Str = "";
+    private String totalSanctionedK2Str = "";
+    private String uniqueUploadedStr = "";
+    private String uniqueSanctionStr = "";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -63,6 +66,8 @@ public class dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         totalUploadedK2 = (TextView) findViewById(R.id.total_uploaded_k2);
         totalSanctionedK1 = (TextView) findViewById(R.id.total_sactioned_k1);
         totalSanctionedK2 = (TextView) findViewById(R.id.total_sactioned_k2);
+        uniqueEnrolled = (TextView) findViewById(R.id.unique_enrolled);
+        uniqueSanctioned = (TextView) findViewById(R.id.unique_sanctioned);
 
         spinner = (Spinner) findViewById(R.id.dashboard_spinner);
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this, R.array.spinner_list_array, android.R.layout.simple_spinner_dropdown_item);
@@ -141,7 +146,7 @@ public class dashboard extends AppCompatActivity implements AdapterView.OnItemSe
 
     }
 
-    private class SendPostReqAsyncTask extends AsyncTask<String,Void,String> {
+    private class SendPostReqAsyncTask extends AsyncTask<String, Void, Void> {
 
         ProgressDialog dialog = new ProgressDialog(dashboard.this);
 
@@ -152,34 +157,56 @@ public class dashboard extends AppCompatActivity implements AdapterView.OnItemSe
         }
 
         @Override
-        protected String doInBackground(String... strings) {
+        protected Void doInBackground(String... strings) {
+            JSONObject jsonObject = null;
             try {
                 jsonStr = getResponse(strings[0]);
+                JSONArray jsonArray = new JSONArray(jsonStr);
+                jsonObject = jsonArray.getJSONObject(0);
+
+                switch (strings[0]) {
+                    case "unique":
+                        uniqueUploadedStr = jsonObject.getString("uploaded_k1");
+                        uniqueSanctionStr = jsonObject.getString("sanctioned_k1");
+                        break;
+
+                    case "unique_application":
+                        break;
+
+                    case "total":
+                        totalUploadedK1Str = jsonObject.getString("uploaded_k1");
+                        totalSanctionedK1Str = jsonObject.getString("sanctioned_k1");
+                        totalUploadedK2Str = jsonObject.getString("uploaded_k2");
+                        totalSanctionedK2Str = jsonObject.getString("sanctioned_k2");
+                        break;
+                }
             } catch (UnsupportedEncodingException e) {
                 e.printStackTrace();
-            }
-            return jsonStr;
-        }
-
-        @Override
-        protected void onPostExecute(String s) {
-            super.onPostExecute(s);
-            dialog.dismiss();
-            //Toast.makeText(getApplicationContext(), s, Toast.LENGTH_LONG).show();
-            try {
-                JSONObject jsonObject = null;
-                jsonObject = new JSONObject(s);
-                uploadedK1 = jsonObject.getString("uploaded_k1");
-                sanctionedK1 = jsonObject.getString("sanctioned_k1");
-                uploadedK2 = jsonObject.getString("uploaded_k2");
-                sanctionedK2 = jsonObject.getString("sanctioned_k2");
             } catch (JSONException e) {
                 e.printStackTrace();
             }
-            totalUploadedK1.setText(uploadedK1);
-            totalUploadedK2.setText(uploadedK2);
-            totalSanctionedK1.setText(sanctionedK1);
-            totalSanctionedK2.setText(sanctionedK2);
+            return null;
+        }
+
+        @Override
+        protected void onPostExecute(Void s) {
+            super.onPostExecute(s);
+            dialog.dismiss();
+            Toast.makeText(getApplicationContext(), jsonStr, Toast.LENGTH_LONG).show();
+            /*try {
+                JSONObject jsonObject = null;
+                jsonObject = new JSONObject(s);*/
+
+            /*} catch (JSONException e) {
+                e.printStackTrace();
+            }*/
+            //Toast.makeText(getApplicationContext(), uploadedK1+" "+sanctionedK1, Toast.LENGTH_LONG).show();
+            totalUploadedK1.setText(totalUploadedK1Str);
+            totalUploadedK2.setText(totalUploadedK2Str);
+            totalSanctionedK1.setText(totalSanctionedK1Str);
+            totalSanctionedK2.setText(totalSanctionedK2Str);
+            uniqueEnrolled.setText(uniqueUploadedStr);
+            uniqueSanctioned.setText(uniqueSanctionStr);
             sendPostReqAsyncTask = null;
             if (sendPostReqAsyncTask == null) {
                 sendPostReqAsyncTask = new SendPostReqAsyncTask();

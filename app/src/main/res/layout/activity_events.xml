@@ -12,51 +12,10 @@
     tools:context="com.kanyashreemos.Events"
     android:orientation="vertical">
 
-    <LinearLayout
+    <android.support.v7.widget.RecyclerView
+        android:id="@+id/events_recylcer_view"
+        android:scrollbars="vertical"
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-        <Button
-            android:id="@+id/btn_events"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:background="#FF8C00"
-            android:text="EVENTS"
-            android:textStyle="bold"
-            android:textColor="#FFFFFF"/>
-
-        <android.support.v7.widget.CardView
-            android:id="@+id/card_view_events"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:paddingTop="12dp"
-            card_view_awards:cardCornerRadius="4dp"
-            card_view_awards:contentPadding="10dp">
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
-                android:layout_gravity="center_horizontal"
-                android:gravity="center">
-
-                <ImageView
-                    android:id="@+id/img_events"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:src="@drawable/award1"/>
-                <TextView
-                    android:id="@+id/txt_events"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Check"/>
-
-            </LinearLayout>
-
-        </android.support.v7.widget.CardView>
-
-    </LinearLayout>
+        android:layout_height="match_parent"></android.support.v7.widget.RecyclerView>
 
 </ScrollView>
