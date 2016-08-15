@@ -3,6 +3,7 @@ package com.kanyashreemos;
 import android.app.ProgressDialog;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -121,7 +122,8 @@ public class Events extends AppCompatActivity {
                 for (int i=0; i<jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     EventsKeep eventsKeep = new EventsKeep();
-                    eventsKeep.photoDescription = jsonObject.getString("photo_description");
+                    String photoDescription = jsonObject.getString("photo_description");
+                    eventsKeep.photoDescription = Events.getDrawableFromUrl(photoDescription);
                     //eventsKeep.photoDescription = Events.loadBitmap(photoDescription);
                     //URL url = new URL(photoDescription);
                     //eventsKeep.photoDescription = BitmapFactory.decodeStream(url.openConnection().getInputStream());
@@ -164,7 +166,8 @@ public class Events extends AppCompatActivity {
             holder.textView.setText(eventsKeepArrayList.get(position).description);
             //holder.imageView.setImageBitmap(eventsKeepArrayList.get(position).photoDescription);
             //Events.downloadfile(eventsKeepArrayList.get(position).photoDescription,holder.imageView);
-            new DownloadImageTask(holder.imageView).execute(eventsKeepArrayList.get(position).photoDescription);
+            //new DownloadImageTask(holder.imageView).execute(eventsKeepArrayList.get(position).photoDescription);
+            holder.imageView.setImageDrawable(eventsKeepArrayList.get(position).photoDescription);
         }
 
         @Override
@@ -188,6 +191,10 @@ public class Events extends AppCompatActivity {
         public EventsAdapter(ArrayList<EventsKeep> keeps) {
             eventsKeepArrayList = keeps;
         }
+    }
+
+    private static Drawable getDrawableFromUrl(final String url) throws IOException, MalformedURLException {
+        return Drawable.createFromStream(((java.io.InputStream)new java.net.URL(url).getContent()), "name");
     }
 
     /*public Bitmap downloadfile(String fileurl)
@@ -257,7 +264,7 @@ public class Events extends AppCompatActivity {
         return bitmap;
     }*/
 
-    private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
+    /*private class DownloadImageTask extends AsyncTask<String, Void, Bitmap> {
         ImageView bmImage;
         Bitmap bmp = null;
         URL myfileurl = null;
@@ -292,18 +299,18 @@ public class Events extends AppCompatActivity {
                 e.printStackTrace();
             }
             //Bitmap mIcon11 = downloadfile(urldisplay);
-            /*try {
+            try {
                 InputStream in = new java.net.URL(urldisplay).openStream();
                 mIcon11 = BitmapFactory.decodeStream(in);
             } catch (Exception e) {
                 Log.e("Error", e.getMessage());
                 e.printStackTrace();
-            }*/
+            }
             return bmp;
         }
 
         protected void onPostExecute(Bitmap result) {
             bmImage.setImageBitmap(result);
         }
-    }
+    }*/
 }
