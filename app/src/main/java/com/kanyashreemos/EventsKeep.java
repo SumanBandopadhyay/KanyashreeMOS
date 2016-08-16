@@ -7,6 +7,6 @@ import android.graphics.drawable.Drawable;
  * Created by sony on 16-08-2016.
  */
 public class EventsKeep {
-    Drawable photoDescription;
+    Bitmap photoDescription;
     String description;
 }

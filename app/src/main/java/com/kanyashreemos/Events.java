@@ -16,6 +16,7 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -47,6 +48,7 @@ public class Events extends AppCompatActivity {
 
     private String jsonStr = null;
     private ArrayList<EventsKeep> eventsKeeps;
+    private JSONArray jsonArray;
 
     private RecyclerView recyclerView;
     private RecyclerView.Adapter adapter;
@@ -117,13 +119,54 @@ public class Events extends AppCompatActivity {
             eventsKeeps = new ArrayList<>();
             try {
                 jsonStr = getResponse();
-                JSONArray jsonArray = new JSONArray(jsonStr);
+                jsonArray = new JSONArray(jsonStr);
 
                 for (int i=0; i<jsonArray.length(); i++) {
                     JSONObject jsonObject = jsonArray.getJSONObject(i);
                     EventsKeep eventsKeep = new EventsKeep();
-                    String photoDescription = jsonObject.getString("photo_description");
-                    eventsKeep.photoDescription = Events.getDrawableFromUrl(photoDescription);
+                    //String photoDescription = jsonObject.getString("photo_description");
+                    switch (i) {
+                        case 0:
+                            eventsKeep.photoDescription = BitmapFactory.decodeResource(getResources(), R.mipmap.e1);
+                            break;
+
+                        case 1:
+                            eventsKeep.photoDescription = BitmapFactory.decodeResource(getResources(), R.mipmap.e2);
+                            break;
+
+                        case 2:
+                            eventsKeep.photoDescription = BitmapFactory.decodeResource(getResources(), R.mipmap.e3);
+                            break;
+
+                        case 3:
+                            eventsKeep.photoDescription = BitmapFactory.decodeResource(getResources(), R.mipmap.e4);
+                            break;
+
+                        case 4:
+                            eventsKeep.photoDescription = BitmapFactory.decodeResource(getResources(), R.mipmap.e5);
+                            break;
+
+                        case 5:
+                            eventsKeep.photoDescription = BitmapFactory.decodeResource(getResources(), R.mipmap.e6);
+                            break;
+
+                        case 6:
+                            eventsKeep.photoDescription = BitmapFactory.decodeResource(getResources(), R.mipmap.e7);
+                            break;
+
+                        case 7:
+                            eventsKeep.photoDescription = BitmapFactory.decodeResource(getResources(), R.mipmap.e8);
+                            break;
+
+                        case 8:
+                            eventsKeep.photoDescription = BitmapFactory.decodeResource(getResources(), R.mipmap.e9);
+                            break;
+
+                        case 9:
+                            eventsKeep.photoDescription = BitmapFactory.decodeResource(getResources(), R.mipmap.e10);
+                            break;
+                    }
+                    //eventsKeep.photoDescription = Events.getDrawableFromUrl(photoDescription);
                     //eventsKeep.photoDescription = Events.loadBitmap(photoDescription);
                     //URL url = new URL(photoDescription);
                     //eventsKeep.photoDescription = BitmapFactory.decodeStream(url.openConnection().getInputStream());
@@ -137,6 +180,7 @@ public class Events extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
+
             return eventsKeeps;
         }
 
@@ -144,6 +188,7 @@ public class Events extends AppCompatActivity {
         protected void onPostExecute(ArrayList<EventsKeep> s) {
             super.onPostExecute(s);
             dialog.dismiss();
+            //Toast.makeText(getApplicationContext(), jsonArray.length(), Toast.LENGTH_LONG).show();
             //Toast.makeText(getApplicationContext(), jsonStr, Toast.LENGTH_LONG).show();
             adapter = new EventsAdapter(s);
             recyclerView.setAdapter(adapter);
@@ -167,7 +212,7 @@ public class Events extends AppCompatActivity {
             //holder.imageView.setImageBitmap(eventsKeepArrayList.get(position).photoDescription);
             //Events.downloadfile(eventsKeepArrayList.get(position).photoDescription,holder.imageView);
             //new DownloadImageTask(holder.imageView).execute(eventsKeepArrayList.get(position).photoDescription);
-            holder.imageView.setImageDrawable(eventsKeepArrayList.get(position).photoDescription);
+            holder.imageView.setImageBitmap(eventsKeepArrayList.get(position).photoDescription);
         }
 
         @Override
@@ -193,9 +238,9 @@ public class Events extends AppCompatActivity {
         }
     }
 
-    private static Drawable getDrawableFromUrl(final String url) throws IOException, MalformedURLException {
+    /*private static Drawable getDrawableFromUrl(final String url) throws IOException, MalformedURLException {
         return Drawable.createFromStream(((java.io.InputStream)new java.net.URL(url).getContent()), "name");
-    }
+    }*/
 
     /*public Bitmap downloadfile(String fileurl)
     {
